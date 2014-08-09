@@ -1,0 +1,13 @@
+--charset utf-8
+--embed-mixin ClassMethods
+--markup-provider redcarpet
+--markup markdown
+--no-private
+--quiet
+--protected
+--readme README.md
+lib/**/*.rb
+-
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE.txt

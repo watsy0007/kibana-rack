@@ -1,0 +1,24 @@
+---
+AllCops:
+  Include:
+    - '**/*.gemspec'
+    - '**/config.ru'
+    - '**/Gemfile'
+    - '**/Rakefile'
+  Exclude:
+    - '.bundle/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+
+# Handled via inch.
+Style/Documentation:
+  Enabled: false
+
+Style/FileName:
+  Exclude:
+    - !ruby/regexp /(\d+)-(\w+)\.rb$/
+    - Gemfile
+    - Rakefile
+
+Style/LineLength:
+  Max: 120

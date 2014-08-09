@@ -1,0 +1,1 @@
+{"title":"<%= ENV['DASHBOARD_TITLE'] %>"}

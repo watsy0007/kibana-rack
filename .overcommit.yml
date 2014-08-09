@@ -1,0 +1,11 @@
+---
+PreCommit:
+  Rubocop:
+    enabled: true
+    include:
+      - '*.gemspec'
+      - 'bin/*'
+      - 'lib/**/*.{rake,rb}'
+      - 'spec/**/*.rb'
+      - 'Gemfile'
+      - 'Rakefile'
