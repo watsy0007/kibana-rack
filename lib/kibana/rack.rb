@@ -13,9 +13,27 @@ module Kibana
   DEFAULT_KIBANA_INDEX = 'kibana-int'
 
   class << self
-    attr_accessor :elasticsearch_host, :elasticsearch_port
-    attr_accessor :kibana_dashboards_path, :kibana_default_route, :kibana_index
+    # The hostname of the Elasticsearch instance to proxy to.
+    # @return [String]
+    attr_accessor :elasticsearch_host
 
+    # The port of the Elasticsearch instance to proxy to.
+    # @return [Fixnum]
+    attr_accessor :elasticsearch_port
+
+    # The filesystem path to look for Kibana dashboards.
+    # @return [String]
+    attr_accessor :kibana_dashboards_path
+
+    # The default client-side location that Kibana navigates to.
+    # @return [String]
+    attr_accessor :kibana_default_route
+
+    # The name of the internal Elasticsearch index Kibana uses to store metadata and dashboards.
+    # @return [String]
+    attr_accessor :kibana_index
+
+    # Yields the {Kibana} module to allow configuration of global settings.
     def configure(&block)
       block.call(self)
     end
