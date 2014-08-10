@@ -224,6 +224,8 @@ When a new **Major** version is made, a corresponding branch will be created nam
 
 ## Todo
 
+See the [issue tracker](https://github.com/tabolario/kibana-rack/issues?q=is%3Aopen+is%3Aissue+label%3Atodo) for the current list of todos.
+
 * kibana-rails gem for easy integration with Ruby on Rails applications
 * A Ruby DSL for defining dashboards
 * Example dashboards for common use cases
