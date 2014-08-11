@@ -15,7 +15,7 @@ From the [Kibana readme](https://github.com/elasticsearch/kibana/blob/master/REA
 
 kibana-rack tracks the latest version of Kibana (currently 3.1.0) and embeds it directly in your application, along with a proxy for the Elasticsearch API endpoints that Kibana needs.
 
-Kibana dashboards can be created using ERB-processed JSON files in the directory specified by your kibana-rack configuration.
+[Kibana dashboards](http://www.elasticsearch.org/guide/en/kibana/current/_dashboard_schema.html) can be created using ERB-processed JSON files in the directory specified by your kibana-rack configuration.
 
 ## Requirements
 
