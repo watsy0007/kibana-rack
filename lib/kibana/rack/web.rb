@@ -31,12 +31,15 @@ module Kibana
         erb :config
       end
 
-      get(%r{/app/dashboards/([\w-]+\.js(on)?)}) do
-        dashboard = params[:captures].first
-        dashboard_path = File.join(settings.kibana_dashboards_path, dashboard)
+      get(%r{/app/dashboard/(file|script)/([\w-]+)\.(js(on)?)}) do
+        dashboard_name = params[:captures][1]
+        dashboard_ext = params[:captures][2]
+        dashboard_path = File.join(settings.kibana_dashboards_path, "#{dashboard_name}.#{dashboard_ext}")
+
         halt(404, { 'Content-Type' => 'application/json' }, '{"error":"Not found"}') unless File.exist?(dashboard_path)
+
         template = IO.read(dashboard_path)
-        content_type 'application/json'
+        content_type "application/#{dashboard_ext}"
         erb template
       end
 
