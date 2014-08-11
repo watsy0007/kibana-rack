@@ -24,7 +24,7 @@ describe Kibana::Rack::Web do
   end
 
   it 'renders JavaScript dashboards from the dashboard directory' do
-    get '/app/dashboard/script/js_dashboard.js'
+    get '/app/dashboards/js_dashboard.js'
 
     expect(last_response.body).to eql(IO.read(File.join(dashboards_path, 'js_dashboard.js')))
     expect(last_response['Content-Type']).to eql('application/js')
@@ -32,7 +32,7 @@ describe Kibana::Rack::Web do
   end
 
   it 'renders JSON dashboards from the dashboard directory' do
-    get '/app/dashboard/file/json_dashboard.json'
+    get '/app/dashboards/json_dashboard.json'
 
     expect(last_response.body).to eql(IO.read(File.join(dashboards_path, 'json_dashboard.json')))
     expect(last_response['Content-Type']).to eql('application/json')
@@ -41,13 +41,13 @@ describe Kibana::Rack::Web do
 
   it 'processes ERB in dashboards' do
     ENV['DASHBOARD_TITLE'] = 'My Dashboard'
-    get '/app/dashboard/file/erb_dashboard.json'
+    get '/app/dashboards/erb_dashboard.json'
 
     expect(last_response.body.strip).to eql('{"title":"My Dashboard"}')
   end
 
   it 'returns 404 if a dashboard does not exist' do
-    get '/app/dashboard/file/nonexistent.json'
+    get '/app/dashboards/nonexistent.json'
 
     expect(last_response.body.strip).to eql('{"error":"Not found"}')
     expect(last_response.status).to eql(404)
