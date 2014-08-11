@@ -9,7 +9,9 @@
 
 Embed [Kibana](http://www.elasticsearch.org/overview/kibana/) as a [Rack](http://rack.github.io/) application.
 
-Kibana is a beautiful and powerful dashboard built on top of [Elasticsearch](http://www.elasticsearch.org/). It's great for viewing logs indexed by tools like [logstash](http://logstash.net/) and exploring data on Elasticsearch in general.
+From the [Kibana readme](https://github.com/elasticsearch/kibana/blob/master/README.md):
+
+> Kibana is an open source (Apache Licensed), browser based analytics and search interface to Logstash and other timestamped data sets stored in ElasticSearch. With those in place Kibana is a snap to setup and start using (seriously). Kibana strives to be easy to get started with, while also being flexible and powerful
 
 kibana-rack tracks the latest version of Kibana (currently 3.1.0) and embeds it directly in your application, along with a proxy for the Elasticsearch API endpoints that Kibana needs.
 
@@ -18,6 +20,13 @@ Kibana dashboards can be created using ERB-processed JSON files in the directory
 ## Requirements
 
 * Ruby 2.1+ (kibana-rack is developed and tested with Ruby 2.1.2)
+
+### Kibana requirements (also from the Kibana readme)
+
+* Elasticsearch 0.90.9 or above
+* A modern web browser. The latest version of Chrome, Safari and Firefox have all been tested to work. IE9 and greater should work. IE8 does not.
+* A webserver. No extensions are required, as long as it can serve plain html it will work
+* A browser reachable Elasticsearch server. Port 9200 must be open, or a proxy configured to allow access to it. (**kibana-rack takes care of this for you!**)
 
 ## Installation
 
