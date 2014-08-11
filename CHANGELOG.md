@@ -1,5 +1,9 @@
 # Change history for kibana-rack
 
+## [v0.1.2](https://github.com/tabolario/kibana-rack/releases/tag/v0.1.2)
+
+* [Bug] [Serve dashboard files from app/dashboards](https://github.com/tabolario/kibana-rack/issues/10)
+
 ## [v0.1.1](https://github.com/tabolario/kibana-rack/releases/tag/v0.1.1)
 
 * [Bug] [Support scripted dashboard endpoint (/dashboard/script/*.js)](https://github.com/tabolario/kibana-rack/issues/8)
