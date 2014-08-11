@@ -1,6 +1,6 @@
 # Change history for kibana-rack
 
-## [v0.1.2](https://github.com/tabolario/kibana-rack/releases/tag/v0.1.2)
+## [v0.1.3](https://github.com/tabolario/kibana-rack/releases/tag/v0.1.3)
 
 * [Bug] [Serve dashboard files from app/dashboards](https://github.com/tabolario/kibana-rack/issues/10)
 
