@@ -1,5 +1,10 @@
 # Change history for kibana-rack
 
+## [v0.1.1](https://github.com/tabolario/kibana-rack/releases/tag/v0.1.1)
+
+* [Bug] [Support scripted dashboard endpoint (/dashboard/script/*.js)](https://github.com/tabolario/kibana-rack/issues/8)
+* [Bug] [Dashboard endpoint should return correct content type](https://github.com/tabolario/kibana-rack/issues/2)
+
 ## [v0.1.0](https://github.com/tabolario/kibana-rack/releases/tag/v0.1.0)
 
 * Initial release
