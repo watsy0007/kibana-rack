@@ -33,7 +33,7 @@ module Kibana
             proxy_request.url(request.path_info)
             proxy_request.headers['Content-Type'] = 'application/json'
             proxy_request.params = env['rack.request.query_hash']
-            proxy_request.body = request.body.read if proxy_method == :post
+            proxy_request.body = request.body.read if [:post, :put].include?(proxy_method)
           end
 
           [proxy_response.status, proxy_response.headers, proxy_response.body]

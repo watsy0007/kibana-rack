@@ -95,7 +95,7 @@ describe Kibana::Rack::Web do
         .with(body: options[:body], query: options[:params])
         .to_return(body: '{}', headers: { 'foo' => 'bar' }, status: 200)
 
-      request_params = request_method == :post ? options[:body] : options[:params]
+      request_params = options[:body] || options[:params]
       send(request_method, path, request_params)
 
       expect(last_response.body).to eql('{}')
