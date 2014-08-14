@@ -26,7 +26,7 @@ module Kibana
 
           proxy_method = request.request_method.downcase.to_sym
           proxy_response = proxy.send(proxy_method) do |proxy_request|
-            proxy_request.url(params[:captures].first)
+            proxy_request.url(request.path_info)
             proxy_request.headers['Content-Type'] = 'application/json'
             proxy_request.params = env['rack.request.query_hash']
             proxy_request.body = request.body.read if proxy_method == :post
