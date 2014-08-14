@@ -20,6 +20,20 @@ module Kibana
           es_port = settings.elasticsearch_port
           @proxy ||= Faraday.new(url: "http://#{es_host}:#{es_port}")
         end
+
+        def proxy_es_request
+          request.body.rewind
+
+          proxy_method = request.request_method.downcase.to_sym
+          proxy_response = proxy.send(proxy_method) do |proxy_request|
+            proxy_request.url(params[:captures].first)
+            proxy_request.headers['Content-Type'] = 'application/json'
+            proxy_request.params = env['rack.request.query_hash']
+            proxy_request.body = request.body.read if proxy_method == :post
+          end
+
+          [proxy_response.status, proxy_response.headers, proxy_response.body]
+        end
       end
 
       get '/' do
@@ -44,17 +58,7 @@ module Kibana
       end
 
       route(:delete, :get, :post, :put, %r{^((/_(aliases|nodes))|(.+/_(aliases|mapping|search)))}) do
-        request.body.rewind
-
-        proxy_method = request.request_method.downcase.to_sym
-        proxy_response = proxy.send(proxy_method) do |proxy_request|
-          proxy_request.url(params[:captures].first)
-          proxy_request.headers['Content-Type'] = 'application/json'
-          proxy_request.params = env['rack.request.query_hash']
-          proxy_request.body = request.body.read if proxy_method == :post
-        end
-
-        [proxy_response.status, proxy_response.headers, proxy_response.body]
+        proxy_es_request
       end
     end
   end
