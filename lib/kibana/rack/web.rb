@@ -15,6 +15,10 @@ module Kibana
       set :kibana_index, -> { Kibana.kibana_index }
 
       helpers do
+        def validate_kibana_index_name
+          halt(404, '<h1>Not Found</h1>') unless params[:index] == settings.kibana_index
+        end
+
         def proxy
           es_host = settings.elasticsearch_host
           es_port = settings.elasticsearch_port
@@ -71,6 +75,19 @@ module Kibana
         proxy_es_request
       end
       route(:delete, :get, :post, :put, '/:index/_search') do
+        proxy_es_request
+      end
+
+      route(:delete, :get, :post, :put, '/:index/temp') do
+        validate_kibana_index_name
+        proxy_es_request
+      end
+      route(:delete, :get, :post, :put, '/:index/temp/:name') do
+        validate_kibana_index_name
+        proxy_es_request
+      end
+      route(:delete, :get, :post, :put, '/:index/dashboard/:dashboard') do
+        validate_kibana_index_name
         proxy_es_request
       end
     end
