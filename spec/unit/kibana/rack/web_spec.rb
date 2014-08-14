@@ -53,6 +53,27 @@ describe Kibana::Rack::Web do
     expect(last_response.status).to eql(404)
   end
 
+  [
+    %w(put /_cluster/settings),
+    %w(post /_shutdown),
+    %w(post /_cluster/nodes/_shutdown),
+    %w(delete /*),
+    %w(delete /_all),
+    %w(delete /_all/_query?q=*),
+    %w(delete /logstash-2014.08.08/_query?q=*),
+    %w(delete /logstash-2014.08.08),
+    %w(post /logstash-2014.08.08),
+    %w(put /logstash-2014.08.08/message/123),
+    %w(post /logstash-2014.08.08/message/123/_update)
+  ].each do |method, path|
+    it "should prevent #{method.upcase} #{path} being proxied to Elasticsearch" do
+      send(method, path)
+
+      expect(last_response.body.strip).to eql('<h1>Not Found</h1>')
+      expect(last_response.status).to eql(404)
+    end
+  end
+
   {
     '/_aliases'                                         => { method: :get },
     '/_nodes'                                           => { method: :get },
