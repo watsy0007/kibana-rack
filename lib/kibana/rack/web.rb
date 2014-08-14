@@ -57,7 +57,20 @@ module Kibana
         erb template
       end
 
-      route(:delete, :get, :post, :put, %r{^((/_(aliases|nodes))|(.+/_(aliases|mapping|search)))}) do
+      route(:delete, :get, :post, :put, '/_aliases') do
+        proxy_es_request
+      end
+      route(:delete, :get, :post, :put, '/_nodes') do
+        proxy_es_request
+      end
+
+      route(:delete, :get, :post, :put, '/:index/_aliases') do
+        proxy_es_request
+      end
+      route(:delete, :get, :post, :put, '/:index/_mapping') do
+        proxy_es_request
+      end
+      route(:delete, :get, :post, :put, '/:index/_search') do
         proxy_es_request
       end
     end
