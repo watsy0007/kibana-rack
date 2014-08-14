@@ -4,6 +4,7 @@ describe Kibana::Rack::Web do
   include Rack::Test::Methods
 
   KIBANA_INDEX = 'test-int'
+
   let(:app) { described_class }
   let(:dashboards_path) { File.expand_path('../../../../fixtures/dashboards', __FILE__) }
 
@@ -50,7 +51,7 @@ describe Kibana::Rack::Web do
   it 'returns 404 if a dashboard does not exist' do
     get '/app/dashboards/nonexistent.json'
 
-    expect(last_response.body.strip).to eql('{"error":"Not found"}')
+    expect(last_response.body.strip).to eql('<h1>Not Found</h1>')
     expect(last_response.status).to eql(404)
   end
 
