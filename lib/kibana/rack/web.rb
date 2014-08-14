@@ -15,10 +15,32 @@ module Kibana
       set :kibana_index, -> { Kibana.kibana_index }
 
       helpers do
+        def validate_kibana_index_name
+          render_not_found unless params[:index] == settings.kibana_index
+        end
+
         def proxy
           es_host = settings.elasticsearch_host
           es_port = settings.elasticsearch_port
           @proxy ||= Faraday.new(url: "http://#{es_host}:#{es_port}")
+        end
+
+        def proxy_es_request
+          request.body.rewind
+
+          proxy_method = request.request_method.downcase.to_sym
+          proxy_response = proxy.send(proxy_method) do |proxy_request|
+            proxy_request.url(request.path_info)
+            proxy_request.headers['Content-Type'] = 'application/json'
+            proxy_request.params = env['rack.request.query_hash']
+            proxy_request.body = request.body.read if [:post, :put].include?(proxy_method)
+          end
+
+          [proxy_response.status, proxy_response.headers, proxy_response.body]
+        end
+
+        def render_not_found
+          halt(404, '<h1>Not Found</h1>')
         end
       end
 
@@ -36,25 +58,46 @@ module Kibana
         dashboard_ext = params[:captures][1]
         dashboard_path = File.join(settings.kibana_dashboards_path, "#{dashboard_name}.#{dashboard_ext}")
 
-        halt(404, { 'Content-Type' => 'application/json' }, '{"error":"Not found"}') unless File.exist?(dashboard_path)
+        render_not_found unless File.exist?(dashboard_path)
 
         template = IO.read(dashboard_path)
         content_type "application/#{dashboard_ext}"
         erb template
       end
 
-      route(:delete, :get, :post, :put, %r{^((/_(aliases|nodes))|(.+/_(aliases|mapping|search)))}) do
-        request.body.rewind
+      route(:delete, :get, :post, :put, '/_aliases') do
+        proxy_es_request
+      end
 
-        proxy_method = request.request_method.downcase.to_sym
-        proxy_response = proxy.send(proxy_method) do |proxy_request|
-          proxy_request.url(params[:captures].first)
-          proxy_request.headers['Content-Type'] = 'application/json'
-          proxy_request.params = env['rack.request.query_hash']
-          proxy_request.body = request.body.read if proxy_method == :post
-        end
+      route(:delete, :get, :post, :put, '/_nodes') do
+        proxy_es_request
+      end
 
-        [proxy_response.status, proxy_response.headers, proxy_response.body]
+      route(:delete, :get, :post, :put, '/:index/_aliases') do
+        proxy_es_request
+      end
+
+      route(:delete, :get, :post, :put, '/:index/_mapping') do
+        proxy_es_request
+      end
+
+      route(:delete, :get, :post, :put, '/:index/_search') do
+        proxy_es_request
+      end
+
+      route(:delete, :get, :post, :put, '/:index/temp') do
+        validate_kibana_index_name
+        proxy_es_request
+      end
+
+      route(:delete, :get, :post, :put, '/:index/temp/:name') do
+        validate_kibana_index_name
+        proxy_es_request
+      end
+
+      route(:delete, :get, :post, :put, '/:index/dashboard/:dashboard') do
+        validate_kibana_index_name
+        proxy_es_request
       end
     end
   end
