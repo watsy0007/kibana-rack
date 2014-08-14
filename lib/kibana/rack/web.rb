@@ -16,7 +16,7 @@ module Kibana
 
       helpers do
         def validate_kibana_index_name
-          halt(404, '<h1>Not Found</h1>') unless params[:index] == settings.kibana_index
+          render_not_found unless params[:index] == settings.kibana_index
         end
 
         def proxy
@@ -38,6 +38,10 @@ module Kibana
 
           [proxy_response.status, proxy_response.headers, proxy_response.body]
         end
+
+        def render_not_found
+          halt(404, '<h1>Not Found</h1>')
+        end
       end
 
       get '/' do
@@ -54,7 +58,7 @@ module Kibana
         dashboard_ext = params[:captures][1]
         dashboard_path = File.join(settings.kibana_dashboards_path, "#{dashboard_name}.#{dashboard_ext}")
 
-        halt(404, { 'Content-Type' => 'application/json' }, '{"error":"Not found"}') unless File.exist?(dashboard_path)
+        render_not_found unless File.exist?(dashboard_path)
 
         template = IO.read(dashboard_path)
         content_type "application/#{dashboard_ext}"
@@ -64,6 +68,7 @@ module Kibana
       route(:delete, :get, :post, :put, '/_aliases') do
         proxy_es_request
       end
+
       route(:delete, :get, :post, :put, '/_nodes') do
         proxy_es_request
       end
@@ -71,9 +76,11 @@ module Kibana
       route(:delete, :get, :post, :put, '/:index/_aliases') do
         proxy_es_request
       end
+
       route(:delete, :get, :post, :put, '/:index/_mapping') do
         proxy_es_request
       end
+
       route(:delete, :get, :post, :put, '/:index/_search') do
         proxy_es_request
       end
@@ -82,10 +89,12 @@ module Kibana
         validate_kibana_index_name
         proxy_es_request
       end
+
       route(:delete, :get, :post, :put, '/:index/temp/:name') do
         validate_kibana_index_name
         proxy_es_request
       end
+
       route(:delete, :get, :post, :put, '/:index/dashboard/:dashboard') do
         validate_kibana_index_name
         proxy_es_request
