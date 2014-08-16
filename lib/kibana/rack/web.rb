@@ -1,3 +1,5 @@
+require 'kibana/rack/proxy'
+
 module Kibana
   module Rack
     # Rack application that serves Kibana and proxies requests to Elasticsearch
@@ -20,23 +22,23 @@ module Kibana
         end
 
         def proxy
-          es_host = settings.elasticsearch_host
-          es_port = settings.elasticsearch_port
-          @proxy ||= Faraday.new(url: "http://#{es_host}:#{es_port}")
+          @proxy ||= begin
+            host = settings.elasticsearch_host
+            port = settings.elasticsearch_port
+            Proxy.new(host: host, port: port)
+          end
         end
 
         def proxy_es_request
           request.body.rewind
 
           proxy_method = request.request_method.downcase.to_sym
-          proxy_response = proxy.send(proxy_method) do |proxy_request|
-            proxy_request.url(request.path_info)
-            proxy_request.headers['Content-Type'] = 'application/json'
-            proxy_request.params = env['rack.request.query_hash']
-            proxy_request.body = request.body.read if [:post, :put].include?(proxy_method)
-          end
+          proxy_path = request.path_info
+          proxy_headers = { 'Content-Type' => 'application/json' }
+          proxy_params = env['rack.request.query_hash']
+          proxy_body = request.body.read if %i(post put).include?(proxy_method)
 
-          [proxy_response.status, proxy_response.headers, proxy_response.body]
+          proxy.request(proxy_method, proxy_path, proxy_headers, proxy_params, proxy_body)
         end
 
         def render_not_found
@@ -65,39 +67,27 @@ module Kibana
         erb template
       end
 
-      route(:delete, :get, :post, :put, '/_aliases') do
-        proxy_es_request
+      %w(
+        _aliases
+        _nodes
+        :index/_aliases
+        :index/_mapping
+        :index/_search
+      ).each do |path|
+        route(:delete, :get, :post, :put, "/#{path}") do
+          proxy_es_request
+        end
       end
 
-      route(:delete, :get, :post, :put, '/_nodes') do
-        proxy_es_request
-      end
-
-      route(:delete, :get, :post, :put, '/:index/_aliases') do
-        proxy_es_request
-      end
-
-      route(:delete, :get, :post, :put, '/:index/_mapping') do
-        proxy_es_request
-      end
-
-      route(:delete, :get, :post, :put, '/:index/_search') do
-        proxy_es_request
-      end
-
-      route(:delete, :get, :post, :put, '/:index/temp') do
-        validate_kibana_index_name
-        proxy_es_request
-      end
-
-      route(:delete, :get, :post, :put, '/:index/temp/:name') do
-        validate_kibana_index_name
-        proxy_es_request
-      end
-
-      route(:delete, :get, :post, :put, '/:index/dashboard/:dashboard') do
-        validate_kibana_index_name
-        proxy_es_request
+      %w(
+        :index/temp
+        :index/temp/:name
+        :index/dashboard/:dashboard
+      ).each do |path|
+        route(:delete, :get, :post, :put, "/#{path}") do
+          validate_kibana_index_name
+          proxy_es_request
+        end
       end
     end
   end
