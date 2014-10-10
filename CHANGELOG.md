@@ -1,5 +1,9 @@
 # Change history for kibana-rack
 
+## [v0.2.0](https://github.com/tabolario/kibana-rack/releases/tag/v0.2.0)
+
+* [Enhancement] [Upgrade Kibana to 3.1.1](https://github.com/tabolario/kibana-rack/pull/17)
+
 ## [v0.1.4](https://github.com/tabolario/kibana-rack/releases/tag/v0.1.4)
 
 * [Bug] [Proxy temporary and permanent dashboards to ES](https://github.com/tabolario/kibana-rack/pull/12) - [dcarley](https://github.com/dcarley)
