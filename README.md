@@ -1,4 +1,4 @@
-# kibana-rack [![Kibana Version](https://img.shields.io/badge/kibana%20version-3.1.0-orange.svg)](http://www.elasticsearch.org/overview/kibana/)
+# kibana-rack [![Kibana Version](https://img.shields.io/badge/kibana%20version-3.1.1-orange.svg)](http://www.elasticsearch.org/overview/kibana/)
 
 [![Gem Version](https://img.shields.io/gem/v/kibana-rack.svg)](https://rubygems.org/gems/kibana-rack)
 [![Dependency Status](https://gemnasium.com/tabolario/kibana-rack.svg)](https://gemnasium.com/tabolario/kibana-rack)
@@ -13,7 +13,7 @@ From the [Kibana readme](https://github.com/elasticsearch/kibana/blob/master/REA
 
 > Kibana is an open source (Apache Licensed), browser based analytics and search interface to Logstash and other timestamped data sets stored in ElasticSearch. With those in place Kibana is a snap to setup and start using (seriously). Kibana strives to be easy to get started with, while also being flexible and powerful
 
-kibana-rack tracks the latest version of Kibana (currently 3.1.0) and embeds it directly in your application, along with a proxy for the Elasticsearch API endpoints that Kibana needs.
+kibana-rack tracks the latest version of Kibana (currently 3.1.1) and embeds it directly in your application, along with a proxy for the Elasticsearch API endpoints that Kibana needs.
 
 [Kibana dashboards](http://www.elasticsearch.org/guide/en/kibana/current/_dashboard_schema.html) can be created using ERB-processed JSON files in the directory specified by your kibana-rack configuration.
 
