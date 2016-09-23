@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.signing_key = File.expand_path('~/.ssh/gem-private_key.pem') if $PROGRAM_NAME =~ /gem\z/
 
   spec.add_dependency 'faraday',         '~> 0.9.2'
+  spec.add_dependency 'rack',            '~> 2.0'
   spec.add_dependency 'sinatra',         '~> 1.4.7'
   spec.add_dependency 'sinatra-contrib', '~> 1.4.7'
 
