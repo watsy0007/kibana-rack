@@ -2,7 +2,7 @@ module Kibana
   module Rack
     # Rack application that serves Kibana and proxies requests to Elasticsearch
     class Web < Sinatra::Base
-      # register Sinatra::MultiRoute
+      register Sinatra::MultiRoute
 
       set :root, File.expand_path('../../../../web', __FILE__)
       set :public_folder, -> { "#{root}/assets" }

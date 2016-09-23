@@ -1,6 +1,6 @@
 require 'faraday'
 require 'sinatra/base'
-# require 'sinatra/multi_route'
+require 'sinatra/sinatra-contrib/multi_route'
 
 require 'kibana/rack/version'
 require 'kibana/rack/web'
